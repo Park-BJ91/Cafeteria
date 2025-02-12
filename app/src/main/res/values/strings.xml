@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Cafeteria</string>
+
+    <!--BottomNavItem -->
+
+    <!-- Route -->
+    <string name="home">home</string>
+    <string name="reservation">reservation</string>
+    <string name="board">board</string>
+    <string name="settings">settings</string>
+    <string name="insert">insert</string>
+    <!-- Title -->
+    <string name="home_title">메인</string>
+    <string name="reservation_title">예약 내역</string>
+    <string name="board_title">게시판</string>
+    <string name="settings_title">설정</string>
+    <string name="insert_title">메뉴 등록</string>
+
+</resources>
