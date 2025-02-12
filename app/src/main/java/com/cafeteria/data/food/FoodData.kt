@@ -11,6 +11,14 @@ data class CustomDialogData(
     val onClickConfirm: () -> Unit = {},
 )
 
+data class CustomDialogImageData(
+    val title: String = "",
+    val description: String = "",
+    val onClickCancel: () -> Unit = {},
+    val onClickGallery: (ByteArray) -> Unit = {},
+    val onClickCamara: (ByteArray) -> Unit = {},
+)
+
 @Entity(tableName = "food_tbl")
 data class FoodData(
     @PrimaryKey(autoGenerate = true)

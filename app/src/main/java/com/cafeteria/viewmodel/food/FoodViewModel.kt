@@ -4,18 +4,20 @@ import android.util.Log
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
 import com.cafeteria.data.food.CustomDialogData
+import com.cafeteria.data.food.CustomDialogImageData
 import com.cafeteria.data.food.FoodData
 import com.cafeteria.repository.FoodRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 
-//class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
 class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
 
+    // 기존 다이얼 로그
     private val _dialogState = MutableStateFlow(CustomDialogData())
     val dialogState = _dialogState
 
+    // 기존 다이얼 로그 상태
     private val _dialogBoolean = MutableStateFlow(false)
     val dialogBoolean = _dialogBoolean
 
@@ -24,7 +26,60 @@ class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
     val foodState = _foodState
 
 
-    val pictureState = MutableStateFlow(false)
+    // 이미지 등록 다이얼 로그
+    private val _pictureState = MutableStateFlow(CustomDialogImageData())
+    val pictureState = _pictureState
+    // 이미지 등록 다이얼 로그 상태
+    private val _pictureBoolean = MutableStateFlow(false)
+    val pictureBoolean = _pictureBoolean
+
+    private val _pictureImg = MutableStateFlow<ByteArray?>(null)
+    val pictureImg = _pictureImg
+
+
+    // 이미지 등록 다이얼 로그
+    fun showDialogOneImage() {
+        _pictureState.update {
+            it.copy(
+                title = "이미지 등록 선택",
+                description = "취소 하려면 범위 밖을 누르시오",
+                onClickCancel = {
+                    dialogImgReset()
+                },
+                onClickGallery = { image ->
+                    galleryFun(image)
+                },
+                onClickCamara = { image ->
+                    cameraFun(image)
+                }
+            )
+        }
+        _pictureBoolean.value = true
+    }
+
+    private fun galleryFun(imgData: ByteArray) {
+        Log.d("www", " Gallery :: $imgData")
+        pictureImg.value = imgData
+        _pictureState.value = CustomDialogImageData()
+        _pictureBoolean.value = false
+    }
+
+    private fun cameraFun(imgData: ByteArray) {
+        Log.d("www", " Camara :: $imgData")
+        pictureImg.value = imgData
+        _pictureState.value = CustomDialogImageData()
+        _pictureBoolean.value = false
+    }
+
+    private fun dialogImgReset() {
+        Log.d("www", " Cancel")
+        _pictureState.value = CustomDialogImageData()
+        _pictureBoolean.value = false
+    }
+
+
+
+
 
     // 메뉴 데이터 등록
     suspend fun foodInsert(t: String,d: String) {
@@ -35,15 +90,8 @@ class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
         repository.foodInsert(_foodState.value)
     }
 
-    init {
-        pictureState.value = false
-        Log.d("xxx", "ViewModel Init :: $pictureState")
-    }
 
-    fun pictureBoolean() {
-        pictureState.value = true
-    }
-
+    // 기본 다이얼 로그
     fun showDialogOne() {
         _dialogState.update {
             it.copy(
@@ -56,7 +104,6 @@ class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
                     confirmMove()
                 }
             )
-
         }
         _dialogBoolean.value = true
 

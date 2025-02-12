@@ -2,10 +2,14 @@ package com.cafeteria.ui.insert
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,12 +27,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cafeteria.CameraPermissionRequester
 import com.cafeteria.destination.bottom.BottomNavItem
+import com.cafeteria.ui.dialog.meun.MenuInsertDialog
+import com.cafeteria.ui.dialog.meun.MenuInsertDialogImage
 import com.cafeteria.viewmodel.food.FoodViewModel
 import com.cafeteria.viewmodel.provider.AppViewModelProvider
 import kotlinx.coroutines.launch
@@ -41,13 +48,22 @@ fun InsertScreen(
     foodViewModel: FoodViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
 
+    // 텍스트 입력 데이터
     var titleValue by remember { mutableStateOf("") }
     var descriptionValue by remember { mutableStateOf("") }
 
-    val selectedChooser = foodViewModel.pictureState.collectAsState().value
-    Log.d("xxx", "VALUE ::  $selectedChooser")
+    // 기존 다이얼 로그
+    val viewModelState by foodViewModel.dialogState.collectAsState()
+    val viewModelCheck by foodViewModel.dialogBoolean.collectAsState()
+
+    val pictureState by foodViewModel.pictureState.collectAsState()
+    val pictureBoolean by foodViewModel.pictureBoolean.collectAsState()
+    val pictureImg by foodViewModel.pictureImg.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
+
+
+    // 이미지 또는 카메라에서 뒤로 돌아 갔을시 Dialog 남아있는 문제
 
     Box(
         modifier = Modifier
@@ -57,22 +73,31 @@ fun InsertScreen(
             modifier = Modifier
                 .align(Alignment.Center)
         ) {
-            Button(
-                onClick = {
-                    foodViewModel.pictureBoolean()
+            if (pictureBoolean) {
+                MenuInsertDialogImage(
+                    title = pictureState.title,
+                    description = pictureState.description,
+                    onClickCancel = pictureState.onClickCancel,
+                    onClickGallery = pictureState.onClickGallery,
+                    onClickCamara = pictureState.onClickCamara
+                )
+            }
 
-                }
+            Button(
+                onClick = { foodViewModel.showDialogOneImage() }
             ) {
-                Text("이미지 업로드 선택")
+                Text(text = "사진 업로드")
             }
-            if (selectedChooser) {
-                ImagePicker(
-                    selectedChooser = selectedChooser
-                ) {
-                    it
+
+            // ########## 값 유지 때문에 무한 루프 에러남 !!!!
+            if (pictureImg != null) {
+                val imageBitmap = remember {
+                    BitmapFactory.decodeByteArray(pictureImg, 0, pictureImg!!.size).asImageBitmap()
                 }
+                Image(bitmap = imageBitmap, contentDescription = "Loaded Image")
             }
-            OutlinedTextField (
+
+            OutlinedTextField(
                 value = titleValue,
                 onValueChange = {
                     titleValue = it
@@ -83,7 +108,7 @@ fun InsertScreen(
                 singleLine = true,
             )
 
-            OutlinedTextField (
+            OutlinedTextField(
                 value = descriptionValue,
                 onValueChange = {
                     descriptionValue = it
@@ -95,9 +120,9 @@ fun InsertScreen(
             )
 
             Button(
-                onClick =  {
+                onClick = {
                     coroutineScope.launch {
-                        foodViewModel.foodInsert(titleValue,descriptionValue)
+                        foodViewModel.foodInsert(titleValue, descriptionValue)
                         navController.navigate(BottomNavItem.Settings.route)
                     }
                 }
@@ -108,35 +133,42 @@ fun InsertScreen(
     }
 
 
-/*
-    val viewModelState = viewModel.dialogState.collectAsState()
-    val viewModelCheck = viewModel.dialogBoolean.collectAsState()
 
-    Button(
-        onClick = { viewModel.showDialogOne()  }
-    ) {
-        Text("Dialog")
-    }
 
-    if (viewModelCheck.value) {
-        MenuInsertDialog(
-            title = viewModelState.value.title,
-            description = viewModelState.value.description,
-            onClickCancel = { viewModelState.value.onClickCancel() },
-            onClickConfirm = {
-                viewModelState.value.onClickConfirm()
-                navController.navigate(BottomNavItem.Reservation.route)
+//        val viewModelState by foodViewModel.dialogState.collectAsState()
+//        val viewModelCheck by foodViewModel.dialogBoolean.collectAsState()
+
+    /*        Button(
+                onClick = { foodViewModel.showDialogOne()  }
+            ) {
+                Text("Dialog")
             }
-        )
-    }
-*/
+
+            if (viewModelCheck) {
+                MenuInsertDialog(
+                    title = viewModelState.title,
+                    description = viewModelState.description,
+                    onClickCancel = { viewModelState.onClickCancel() },
+                    onClickConfirm = {
+                        viewModelState.onClickConfirm()
+                        navController.navigate(BottomNavItem.Reservation.route)
+                    }
+                )
+            }*/
 
 }
 
+// 비트맵 전환
+fun Bitmap.asImageBitmap(): ImageBitmap {
+    return this.asImageBitmap()
+}
+
+
 @Composable
 fun ImagePicker(
-    selectedChooser: Boolean,
-    onImageSelected: (ByteArray) -> Unit
+//    foodViewModel: FoodViewModel,
+    onImageSelected: (ByteArray) -> Unit,
+    onClickCancel: () -> Unit,
 ) {
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -146,7 +178,6 @@ fun ImagePicker(
         CameraPermissionRequester {
             cameraPermission = true
         }
-        return
     }
 
     // 갤러리에서 이미지 선택
@@ -178,27 +209,30 @@ fun ImagePicker(
         }
     )
 
+
     // 이미지 선택 옵션 (갤러리 또는 카메라)
-//    LaunchedEffect(selectedChooser) {
-        val options = arrayOf("갤러리에서 선택", "카메라로 찍기")
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("이미지 선택")
-        builder.setItems(options) { _, which ->
-            when (which) {
-                0 -> galleryLauncher.launch("image/*")
-                1 -> {
-                    val file = createImageFile(context)
-                    imageUri = getImageUri(context, file)
-                    cameraLauncher.launch(imageUri!!)
-                }
-            }
-        }
-        builder.show()
-//    }
+//    val options = arrayOf("갤러리에서 선택", "카메라로 찍기")
+//    AlertDialog.Builder(context)
+//        .setTitle("이미지 선택")
+//        .setItems(options) { _, which ->
+//            when (which) {
+//                0 -> {
+//                    galleryLauncher.launch("image/*")
+//                }
+//
+//                1 -> {
+//                    val file = createImageFile(context)
+//                    imageUri = getImageUri(context, file)
+//                    cameraLauncher.launch(imageUri!!)
+//                }
+//            }
+//        }
+//        .show()
 
 }
 
-fun createImageFile(context : Context): File  {
+/*
+fun createImageFile(context: Context): File {
     val storageDir = context.cacheDir // 캐시 디렉토리 사용
     return File.createTempFile(
         "temp_image_", // 파일 이름 접두사
@@ -214,4 +248,5 @@ fun getImageUri(context: Context, file: File): Uri {
         file
     )
 }
+*/
 
