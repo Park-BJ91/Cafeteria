@@ -1,8 +1,8 @@
 package com.cafeteria.destination.bottom
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.AutoStories
+import androidx.compose.material.icons.outlined.Backpack
 import androidx.compose.material.icons.outlined.BrowseGallery
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
@@ -34,13 +34,11 @@ sealed class BottomNavItem(
         title = R.string.settings_title,
         icon = Icons.Outlined.Settings,
     )
-    data object Insert: BottomNavItem(
-        route = R.string.insert.toString(),
-        title = R.string.insert_title,
-        icon = Icons.Outlined.Add
+    data object Menu: BottomNavItem(
+        route = R.string.menu.toString(),
+        title = R.string.menu_title,
+        icon = Icons.Outlined.Backpack
     )
-
-
 }
 
 

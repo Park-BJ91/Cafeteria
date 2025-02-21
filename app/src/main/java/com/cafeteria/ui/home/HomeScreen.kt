@@ -2,12 +2,13 @@ package com.cafeteria.ui.home
 
 
 
-import android.util.Log
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -33,17 +35,28 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cafeteria.CameraPermissionRequester
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cafeteria.R
-import com.cafeteria.data.calendar.MyCalendar
+import com.cafeteria.data.dialog.MyCalendar
+import com.cafeteria.dto.Menu
+import com.cafeteria.dto.isValid
+import com.cafeteria.viewmodel.menu.MenuViewModel
+import com.cafeteria.viewmodel.provider.AppViewModelProvider
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    paddingValues: PaddingValues,
+    menuViewModel: MenuViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+
+
+    val foodDataUi by menuViewModel.menuState.collectAsState()
 
     /**
      *  Row값 기반으로 ViewModel 업데이트 :: 업데이트 내역은 음식 리스트
@@ -67,20 +80,17 @@ fun HomeScreen() {
                 text = "${result["yearMonth"]}",
                 modifier = Modifier.padding(start = 24.dp, top = 24.dp, bottom = 24.dp)
             )
-
             Box {
-                CalendarRow(calendarMap, toDay)
+                CalendarRow(menuViewModel, calendarMap, toDay)
             }
-            FoodMenu()
-
+            Menu(foodDataUi)
         }
-
     }
-
 }
 
 @Composable
 fun CalendarRow(
+    menuViewModel: MenuViewModel,
     calendarMap: HashMap<*, *>,
     toDay: Int
 ) {
@@ -114,6 +124,7 @@ fun CalendarRow(
                     .clickable(
                         onClick = {
                             coroutineScope.launch {
+//                                foodViewModel.foodTarget(it -1)
                                 rowState.scrollToItem(it)
                                 counter = it
                             }
@@ -147,10 +158,9 @@ fun CalendarRow(
 
 
 @Composable
-fun FoodMenu(
-
+fun Menu(
+    menuData: Menu
 ) {
-
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -181,12 +191,26 @@ fun FoodMenu(
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.mix),
-                            contentScale = ContentScale.Crop,
-                            contentDescription = "비빔",
-                            modifier = Modifier.fillMaxSize()
-                        )
+
+                        if (!menuData.menuName.isValid()) {
+                            Image(
+                                painter = painterResource(R.drawable.mix),
+                                contentScale = ContentScale.Crop,
+                                contentDescription = "비빔",
+                                modifier = Modifier.fillMaxSize()
+                            )
+
+                        } else if (menuData.img != null) {
+                            val imageBitmap = BitmapFactory.decodeByteArray(menuData.img, 0, menuData.img.size)
+                            Image(
+                                bitmap = imageBitmap.asImageBitmap(),
+                                contentScale = ContentScale.Crop,
+                                contentDescription = menuData.description,
+                                modifier = Modifier.fillMaxSize()
+                            )
+
+                        }
+
 
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -194,7 +218,7 @@ fun FoodMenu(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = "메인 메뉴 비빔밥",
+                                text = if (menuData.img == null) "메인 메뉴 비빔밥" else menuData.description,
                                 modifier = Modifier.padding(start = 15.dp)
 
                             )

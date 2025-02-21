@@ -42,6 +42,7 @@ import androidx.core.content.FileProvider
 import java.io.File
 
 
+// 메뉴 이미지 업로드 다이얼로그
 @Composable
 fun MenuInsertDialogImage(
     title: String,

@@ -6,13 +6,13 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.cafeteria.MainApplication
-import com.cafeteria.viewmodel.food.FoodViewModel
+import com.cafeteria.viewmodel.menu.MenuViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            FoodViewModel(
-                cafeteriaApplication().container.foodRepository
+            MenuViewModel(
+//                cafeteriaApplication().container.foodRepository
             )
         }
     }

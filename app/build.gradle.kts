@@ -64,6 +64,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // JSON
+    implementation("org.json:json:20230227")
+
     //Room
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
     ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
@@ -71,8 +74,10 @@ dependencies {
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:${rootProject.extra["retrofit_version"]}")
-    // Retrofit with Scalar Converter
+    // Retrofit with Scalar Converter String 형태
     implementation("com.squareup.retrofit2:converter-scalars:${rootProject.extra["retrofit_version"]}")
+    implementation("com.google.code.gson:gson:2.8.2")
+    implementation("com.squareup.retrofit2:converter-gson:2.3.0")
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:${rootProject.extra["okhttp_version"]}")

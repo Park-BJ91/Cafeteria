@@ -1,6 +1,7 @@
 package com.cafeteria
 
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -19,10 +20,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import com.cafeteria.ui.CafeteriaApp
 import com.cafeteria.ui.theme.CafeteriaTheme
-
+import java.util.Locale
 
 
 class MainActivity : ComponentActivity() {
@@ -31,11 +33,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+//            val configuration = LocalConfiguration.current
+//            val context = LocalContext.current
+//            val resources = context.resources
+//            val displayMetrics = resources.displayMetrics
+//            val config = Configuration(configuration)
+//            config.setLocale(Locale("ko", "KR"))
+//            resources.updateConfiguration(config, displayMetrics)
+
             CafeteriaTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    CameraPermissionRequester {  }
+                    CameraPermissionRequester { }
                     CafeteriaApp()
                 }
 

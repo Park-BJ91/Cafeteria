@@ -1,4 +1,4 @@
-package com.cafeteria.data.calendar
+package com.cafeteria.data.dialog
 
 import java.time.LocalDate
 import java.time.YearMonth

@@ -7,6 +7,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+    <!-- 인터넷 접근 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 외부 저장소 읽기 권한 (앨범, 비디오 접근) -->
     <uses-permission
@@ -35,6 +36,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cafeteria"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
         <!-- FileProvider 정의 -->

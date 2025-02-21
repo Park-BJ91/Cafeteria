@@ -9,7 +9,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.cafeteria.config.CafeteriaDatabase
 import com.cafeteria.dao.FoodDao
-import com.cafeteria.data.food.FoodData
+import com.cafeteria.data.menu.FoodData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
