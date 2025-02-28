@@ -60,7 +60,7 @@ fun CustomDatePicker(
                         val yyyyMMdd = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).format(Date(selectedDateMillis))
 //                        onClickConfirm(yyyyMMdd)
                         menuDatePickerViewModel.menuDateUpdate(yyyyMMdd, selectedDateMillis)
-                        menuViewModel.foodDateUpdate(yyyyMMdd)
+                        menuViewModel.menuDateUpdate(yyyyMMdd)
                     }
                 }
             ) {

@@ -1,29 +1,43 @@
 <resources>
     <string name="app_name">Cafeteria</string>
 
-    <!--BottomNavItem -->
-
-    <!-- Route -->
-    <!-- Main Bottom -->
+    <!-- ########## Main ########## -->
+    <!-- Main Route Bottom -->
     <string name="home">home</string>
     <string name="reservation">reservation</string>
     <string name="board">board</string>
     <string name="settings">settings</string>
     <string name="menu">menu</string>
 
-    <!-- Menu -->
-    <string name="route_menu_entry">menuEntry</string>
-
-    <!-- Title -->
-    <!-- Main Bottom -->
+    <!-- Main Title Bottom -->
     <string name="home_title">메인</string>
     <string name="reservation_title">예약 내역</string>
     <string name="board_title">게시판</string>
     <string name="settings_title">설정</string>
     <string name="menu_title">메뉴</string>
 
-    <!-- Menu -->
-    <string name="title_menu_entry">메뉴</string>
+    <!-- ########## Menu ########## -->
+    <!-- Menu Route -->
+    <string name="menu_route_insert">menuEntry</string>
+    <string name="menu_route_detail">menuEntry</string>
+
+    <!-- Menu Title -->
+    <string name="menu_title_insert">메뉴 등록</string>
+    <string name="menu_title_detail">메뉴 상세 정보</string>
+    <string name="menu_title_edit">메뉴 수정</string>
+
+    <!-- Menu Ui Result -->
+    <string name="menu_request_success">요청 완료.</string>
+    <string name="menu_request_duplicate">해당 날에는 존재하는 데이터가 있습니다.</string>
+    <string name="menu_request_fail">요청에 실패 했습니다.</string>
+
+
+<!--    <string name="menu_edit_result">등록 성공</string>-->
+
+    <string name="menu_delete_success">삭제 성공</string>
+    <string name="menu_delete_fail">삭제 실패</string>
+
+
 
 
 </resources>

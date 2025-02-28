@@ -18,6 +18,7 @@ class MyCalendar {
         private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         private val yearMonthFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월")
 
+        // 홈 메뉴 캘린더 생성 사용
         fun findAllCalendar(): MutableMap<String, Any> {
             val yearMonth = YearMonth.of(year, month) // 년&월
             val daysInMonth = yearMonth.lengthOfMonth() // 해당 달의 총일수
@@ -27,10 +28,13 @@ class MyCalendar {
                 Pair(date, date.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.KOREAN))
             }
 
+
+
             val resultMap = HashMap<String, Any>()
             total.forEachIndexed { index, (date, dayOfWeek) ->
                 resultMap["day${index}"] = date.dayOfMonth
                 resultMap["week${index}"] = dayOfWeek.toString()
+                resultMap["selected${index}"] = date.toString()
             }
 
             val mapList = mutableMapOf(

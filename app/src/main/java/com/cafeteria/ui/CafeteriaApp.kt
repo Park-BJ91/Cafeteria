@@ -14,7 +14,6 @@ fun CafeteriaApp(
     navController: NavHostController = rememberNavController(),
 ) {
     CafeteriaNavHost(navController)
-
 }
 
 

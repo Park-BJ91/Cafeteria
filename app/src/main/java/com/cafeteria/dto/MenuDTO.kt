@@ -4,11 +4,17 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Menu(
+    val id:Int = 0,
     val menuName: MenuName = MenuName(), // 메인 내용
     val description: String = "", // 설명
-    val img: ByteArray = byteArrayOf(), // 이미지 적용
+    val img: String = "", // 이미지 적용
     val menuDate: String = "", // 적용 날짜
-    val mealTime: Int = 0  // 중식 , 석식 선택 (0, 1)
+    val mealTime: String = "중식"
+)
+
+@Serializable
+data class MenuList(
+    val menuList: List<Menu> = listOf()
 )
 
 @Serializable

@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 fun MenuTopAppBar(
     title: String,
     back: Boolean,
-    topBarScroll: TopAppBarScrollBehavior? = null,
+//    topBarScroll: TopAppBarScrollBehavior? = null,
     backOnClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
@@ -30,7 +30,7 @@ fun MenuTopAppBar(
                 Text(title)
             }
         },
-        scrollBehavior = topBarScroll,
+//        scrollBehavior = topBarScroll,
         navigationIcon = {
             if (back) {
                 IconButton(onClick = backOnClick) {
