@@ -15,13 +15,6 @@ import com.demo.cafeteria.ui.theme.PracticeTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-class Ta {
-
-    fun a() {
-
-    }
-
-}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
