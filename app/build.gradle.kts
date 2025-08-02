@@ -59,6 +59,27 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.56.2")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
+    // Room
+    val roomVersion = "2.7.2"
+    implementation(libs.androidx.room.runtime)
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+
+    // Retrofit
+    val retrofitVersion = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+
+    // Coroutine
+    val coroutineVersion = "1.8.1"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
+
+
+    // Live Data
+    val lifecycleVersion = "2.9.2"
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+
 
     testImplementation(libs.junit)
 
